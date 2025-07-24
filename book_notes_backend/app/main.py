@@ -11,4 +11,3 @@ app.include_router(authors.router)
 app.include_router(quotes.router)
 app.include_router(markdown.router)
 app.include_router(json.router)
-

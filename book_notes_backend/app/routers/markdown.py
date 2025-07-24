@@ -5,6 +5,7 @@ from .. import crud, database
 
 router = APIRouter(prefix="/export/markdown", tags=["Markdown"])
 
+
 @router.get("/", response_class=Response)
 def export_markdown(db: Session = Depends(database.get_db)):
     content = crud.export_notes_to_markdown(db)

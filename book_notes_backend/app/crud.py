@@ -83,7 +83,7 @@ def export_notes_to_markdown(db: Session) -> str:
 
         book_qs = book_quotes.get(book.id, [])
         if book_qs:
-            md += f"### Quotes:\n"
+            md += "### Quotes:\n"
             for q in book_qs:
                 tag_line = f" _({q.tags})_" if q.tags else ""
                 md += f"- {q.content.strip()}{tag_line}\n"
@@ -99,7 +99,6 @@ def export_notes_to_json(db: Session):
     books = db.query(models.Book).all()
     quotes = db.query(models.Quote).all()
 
-    author_lookup = {author.id: author.name for author in authors}
     book_lookup = {}
     for book in books:
         book_lookup[book.id] = {
