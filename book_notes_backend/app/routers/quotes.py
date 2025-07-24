@@ -14,5 +14,13 @@ def create_quote(
 
 
 @router.get("/", response_model=list[schemas.QuoteOut])
-def get_quotes(tag: str = Query(None), db: Session = Depends(database.get_db)):
-    return crud.get_quotes(db, tag=tag)
+def get_quotes(
+    tags: str = Query(None),
+    db: Session = Depends(
+        database.get_db)):
+    return crud.get_quotes(db, tags=tags)
+
+
+@router.get("/tags", response_model=list[str])
+def list_tags(db: Session = Depends(database.get_db)):
+    return crud.get_all_tags(db)
