@@ -63,3 +63,73 @@ def get_all_tags(db: Session):
             tag_set.update(tags)
 
     return sorted(tag_set)
+
+
+def export_notes_to_markdown(db: Session) -> str:
+    authors = db.query(models.Author).all()
+    books = db.query(models.Book).all()
+    quotes = db.query(models.Quote).all()
+
+    author_lookup = {author.id: author.name for author in authors}
+    book_quotes = {}
+    for quote in quotes:
+        book_quotes.setdefault(quote.book_id, []).append(quote)
+
+    md = "# Book Notes & Quotes\n\n"
+
+    for book in books:
+        md += f"## 📚 {book.title}\n"
+        md += f"**Author:** {author_lookup.get(book.author_id, 'Unknown')}\n\n"
+
+        book_qs = book_quotes.get(book.id, [])
+        if book_qs:
+            md += f"### Quotes:\n"
+            for q in book_qs:
+                tag_line = f" _({q.tags})_" if q.tags else ""
+                md += f"- {q.content.strip()}{tag_line}\n"
+            md += "\n"
+        else:
+            md += "_No quotes yet._\n\n"
+
+    return md
+
+
+def export_notes_to_json(db: Session):
+    authors = db.query(models.Author).all()
+    books = db.query(models.Book).all()
+    quotes = db.query(models.Quote).all()
+
+    author_lookup = {author.id: author.name for author in authors}
+    book_lookup = {}
+    for book in books:
+        book_lookup[book.id] = {
+            "title": book.title,
+            "author_id": book.author_id,
+            "quotes": []
+        }
+
+    for quote in quotes:
+        if quote.book_id in book_lookup:
+            book_lookup[quote.book_id]["quotes"].append({
+                "content": quote.content,
+                "tags": quote.tags
+            })
+
+    # Nest books under authors
+    result = []
+    for author in authors:
+        author_books = []
+        for book in books:
+            if book.author_id == author.id:
+                b = book_lookup.get(book.id)
+                if b:
+                    author_books.append({
+                        "title": b["title"],
+                        "quotes": b["quotes"]
+                    })
+        result.append({
+            "author": author.name,
+            "books": author_books
+        })
+
+    return result
