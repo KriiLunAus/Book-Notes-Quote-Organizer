@@ -4,7 +4,7 @@ from . import models, schemas
 
 
 def create_author(db: Session, author: schemas.AuthorCreate):
-    new_author = models.Author(**author.dict())
+    new_author = models.Author(**author.model_dump())
     db.add(new_author)
     db.commit()
     db.refresh(new_author)
@@ -16,7 +16,7 @@ def get_authors(db: Session):
 
 
 def create_book(db: Session, book: schemas.BookCreate):
-    new_book = models.Book(**book.dict())
+    new_book = models.Book(**book.model_dump())
     db.add(new_book)
     db.commit()
     db.refresh(new_book)

@@ -4,12 +4,12 @@ from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+if os.getenv("ENV") == "test":
+    load_dotenv(".env.test")
+else:
+    load_dotenv(".env")
 
-user = os.environ.get("DB_USER")
-password = os.environ.get("DB_USER_PASSWORD")
-
-DATABASE_URL = f"postgresql://{user}:{password}@localhost/book_notes"
+DATABASE_URL = str(os.environ.get("DATABASE_URL"))
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine)
