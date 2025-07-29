@@ -17,9 +17,14 @@ else:
 TEST_DATABASE_URL = str(os.getenv("DATABASE_URL"))
 
 engine = create_engine(TEST_DATABASE_URL)
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+TestingSessionLocal = sessionmaker(
+    autocommit=False,
+    autoflush=False,
+    bind=engine)
 
 # Override DB dependency
+
+
 def override_get_db():
     db = TestingSessionLocal()
     try:
@@ -27,11 +32,13 @@ def override_get_db():
     finally:
         db.close()
 
+
 @pytest.fixture(scope="session", autouse=True)
 def setup_test_db():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
     app.dependency_overrides[database.SessionLocal] = override_get_db
+
 
 @pytest.fixture()
 def client():
