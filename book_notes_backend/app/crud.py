@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
+from fastapi import HTTPException
 from . import models, schemas
 
 
@@ -15,6 +16,17 @@ def get_authors(db: Session):
     return db.query(models.Author).all()
 
 
+def delete_author(db: Session, author_id: int):
+    author = db.query(
+        models.Author).filter(
+        models.Author.id == author_id).first()
+    if not author:
+        return None
+    db.delete(author)
+    db.commit()
+    return author
+
+
 def create_book(db: Session, book: schemas.BookCreate):
     new_book = models.Book(**book.model_dump())
     db.add(new_book)
@@ -25,6 +37,15 @@ def create_book(db: Session, book: schemas.BookCreate):
 
 def get_books(db: Session):
     return db.query(models.Book).all()
+
+
+def delete_book(db: Session, book_id: int):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not book:
+        return None
+    db.delete(book)
+    db.commit()
+    return book
 
 
 def create_quote(db: Session, quote: schemas.QuoteCreate):
@@ -50,6 +71,33 @@ def get_quotes(db: Session, tags: str = None):
         tag_filters = [models.Quote.tags.ilike(f"%{tag}%") for tag in tag_list]
         query = query.filter(or_(*tag_filters))
     return query.all()
+
+
+def delete_quote(db: Session, quote_id: int):
+    quote = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote not found")
+
+    book = quote.book
+    author = book.author if book else None
+
+    response_data = schemas.QuoteOut(
+        id=quote.id,
+        content=quote.content,
+        tags=quote.tags,
+        book=schemas.BookOut(
+            id=book.id,
+            title=book.title,
+            author=schemas.AuthorNested(
+                id=author.id,
+                name=author.name
+            )
+        )
+    )
+
+    db.delete(quote)
+    db.commit()
+    return response_data
 
 
 def get_all_tags(db: Session):

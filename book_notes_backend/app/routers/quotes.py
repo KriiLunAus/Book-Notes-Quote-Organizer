@@ -24,3 +24,10 @@ def get_quotes(
 @router.get("/tags", response_model=list[str])
 def list_tags(db: Session = Depends(database.get_db)):
     return crud.get_all_tags(db)
+
+
+@router.delete("/{quote_id}", response_model=schemas.QuoteOut)
+def delete_quote(
+        quote_id: int,
+        db: Session = Depends(database.get_db)):
+    return crud.delete_quote(db, quote_id)

@@ -16,3 +16,10 @@ def create_book(
 @router.get("/", response_model=list[schemas.BookOut])
 def read_books(db: Session = Depends(database.get_db)):
     return crud.get_books(db)
+
+
+@router.delete("/{book_id}", response_model=schemas.BookOut)
+def delete_book(
+        book_id: int,
+        db: Session = Depends(database.get_db)):
+    return crud.delete_book(db, book_id)

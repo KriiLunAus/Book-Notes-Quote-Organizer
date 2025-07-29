@@ -16,3 +16,10 @@ def create_author(
 @router.get("/", response_model=list[schemas.AuthorOut])
 def get_authors(db: Session = Depends(database.get_db)):
     return crud.get_authors(db)
+
+
+@router.delete("/{author_id}", response_model=schemas.AuthorOut)
+def delete_author(
+        author_id: int,
+        db: Session = Depends(database.get_db)):
+    return crud.delete_author(db, author_id)
