@@ -10,6 +10,7 @@ class AuthorBase(BaseModel):
 
 class BookBase(BaseModel):
     title: str
+    author_id: Optional[int] = None
 
 
 class QuoteBase(BaseModel):
