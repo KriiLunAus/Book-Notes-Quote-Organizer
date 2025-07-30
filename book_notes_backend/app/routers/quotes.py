@@ -35,7 +35,7 @@ def get_quote(
     return quote
 
 
-@router.put("/quotes/{quote_id}", response_model=schemas.QuoteOut)
+@router.put("/{quote_id}", response_model=schemas.QuoteOut)
 def update_quote(quote_id: int, quote_update: schemas.QuoteCreate, db: Session = Depends(database.get_db)):
     quote = crud.update_quote(db, quote_id, quote_update)
     if not quote:
