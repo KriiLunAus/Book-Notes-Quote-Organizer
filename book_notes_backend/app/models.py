@@ -8,7 +8,10 @@ class Author(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
 
-    books = relationship("Book", back_populates="author")
+    books = relationship(
+        "Book",
+        back_populates="author",
+        cascade="all, delete")
 
 
 class Book(Base):
@@ -18,7 +21,10 @@ class Book(Base):
     author_id = Column(Integer, ForeignKey('authors.id'))
 
     author = relationship("Author", back_populates="books")
-    quotes = relationship("Quote", back_populates="book")
+    quotes = relationship(
+        "Quote",
+        back_populates="book",
+        cascade="all, delete")
 
 
 class Quote(Base):

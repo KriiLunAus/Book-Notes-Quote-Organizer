@@ -1,5 +1,6 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_
+from fastapi import HTTPException
 from . import models, schemas
 
 
@@ -15,6 +16,39 @@ def get_authors(db: Session):
     return db.query(models.Author).all()
 
 
+def get_author(db: Session, author_id: int):
+    return db.query(
+        models.Author).filter(
+        models.Author.id == author_id).first()
+
+
+def update_author(
+        db: Session,
+        author_id: int,
+        updated_data: schemas.AuthorCreate):
+    author = db.query(
+        models.Author).filter(
+        models.Author.id == author_id).first()
+    if not author:
+        return None
+    for key, value in updated_data.model_dump().items():
+        setattr(author, key, value)
+    db.commit()
+    db.refresh(author)
+    return author
+
+
+def delete_author(db: Session, author_id: int):
+    author = db.query(
+        models.Author).filter(
+        models.Author.id == author_id).first()
+    if not author:
+        return None
+    db.delete(author)
+    db.commit()
+    return author
+
+
 def create_book(db: Session, book: schemas.BookCreate):
     new_book = models.Book(**book.model_dump())
     db.add(new_book)
@@ -25,6 +59,49 @@ def create_book(db: Session, book: schemas.BookCreate):
 
 def get_books(db: Session):
     return db.query(models.Book).all()
+
+
+def get_book(db: Session, book_id: int):
+    return db.query(
+        models.Book).options(
+        joinedload(
+            models.Book.author)).filter(
+                models.Book.id == book_id).first()
+
+
+def update_book(db: Session, book_id: int, updated_data: schemas.BookCreate):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not book:
+        return None
+    for key, value in updated_data.model_dump().items():
+        setattr(book, key, value)
+    db.commit()
+    db.refresh(book)
+    return book
+
+
+def delete_book(db: Session, book_id: int):
+    book = db.query(
+        models.Book).options(
+        joinedload(
+            models.Book.author)).filter(
+                models.Book.id == book_id).first()
+    if not book:
+        return None
+
+    response_data = schemas.BookOut(
+        id=book.id,
+        title=book.title,
+        author=schemas.AuthorNested(
+            id=book.author.id,
+            name=book.author.name
+        )
+    )
+
+    db.delete(book)
+    db.commit()
+
+    return response_data
 
 
 def create_quote(db: Session, quote: schemas.QuoteCreate):
@@ -50,6 +127,76 @@ def get_quotes(db: Session, tags: str = None):
         tag_filters = [models.Quote.tags.ilike(f"%{tag}%") for tag in tag_list]
         query = query.filter(or_(*tag_filters))
     return query.all()
+
+
+def get_quote(db: Session, quote_id: int):
+    quote = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote not found")
+
+    book = quote.book
+    author = book.author if book else None
+
+    return schemas.QuoteOut(
+        id=quote.id,
+        content=quote.content,
+        tags=quote.tags,
+        book=schemas.BookOut(
+            id=book.id,
+            title=book.title,
+            author=schemas.AuthorNested(
+                id=author.id,
+                name=author.name
+            )
+        )
+    )
+
+
+def update_quote(
+        db: Session,
+        quote_id: int,
+        updated_data: schemas.QuoteCreate):
+    quote = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+    if not quote:
+        return None
+    cleaned_tags = ",".join(
+        sorted({tag.strip() for tag in updated_data.tags.split(",")
+                if tag.strip()})
+    )
+    update_fields = updated_data.model_dump()
+    update_fields["tags"] = cleaned_tags
+    for key, value in update_fields.items():
+        setattr(quote, key, value)
+    db.commit()
+    db.refresh(quote)
+    return quote
+
+
+def delete_quote(db: Session, quote_id: int):
+    quote = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote not found")
+
+    book = quote.book
+    author = book.author if book else None
+
+    response_data = schemas.QuoteOut(
+        id=quote.id,
+        content=quote.content,
+        tags=quote.tags,
+        book=schemas.BookOut(
+            id=book.id,
+            title=book.title,
+            author=schemas.AuthorNested(
+                id=author.id,
+                name=author.name
+            )
+        )
+    )
+
+    db.delete(quote)
+    db.commit()
+    return response_data
 
 
 def get_all_tags(db: Session):

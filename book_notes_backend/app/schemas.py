@@ -10,7 +10,8 @@ class AuthorBase(BaseModel):
 
 class BookBase(BaseModel):
     title: str
-    
+
+
 class QuoteBase(BaseModel):
     content: str
     tags: Optional[str] = ""
@@ -19,11 +20,11 @@ class QuoteBase(BaseModel):
 
 
 class AuthorCreate(AuthorBase):
-    pass
+    name: str
 
 
 class BookCreate(BookBase):
-    pass
+    author_id: int
 
 
 class QuoteCreate(QuoteBase):
@@ -42,6 +43,14 @@ class AuthorNested(BaseModel):
 class BookNested(BaseModel):
     id: int
     title: str
+
+    model_config = {"from_attributes": True}
+
+
+class QuoteNested(BaseModel):
+    id: int
+    content: str
+    tags: Optional[str] = ""
 
     model_config = {"from_attributes": True}
 
