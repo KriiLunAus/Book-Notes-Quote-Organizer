@@ -23,6 +23,37 @@ def test_create_and_get_books(client):
     assert any(book["title"] == "Test Book" for book in books)
 
 
+def test_delete_author(client):
+    response = client.post("/authors/", json={"name": "Author to Delete"})
+    assert response.status_code == 200
+    author_id = response.json()["id"]
+
+    delete_response = client.delete(f"/authors/{author_id}")
+    assert delete_response.status_code == 200
+
+    get_response = client.get(f"/authors/{author_id}")
+    assert get_response.status_code == 404
+
+
+def test_delete_book(client):
+    response = client.post("/authors/", json={"name": "Test Author"})
+    author_id = response.json()["id"]
+
+    response = client.post(
+        "/books/",
+        json={
+            "title": "Book to Delete",
+            "author_id": author_id})
+    assert response.status_code == 200
+    book_id = response.json()["id"]
+
+    delete_response = client.delete(f"/books/{book_id}")
+    assert delete_response.status_code == 200
+
+    get_response = client.get(f"/books/{book_id}")
+    assert get_response.status_code == 404
+
+
 def test_create_and_get_quotes(client):
     response = client.post(
         "/quotes/",
@@ -38,6 +69,22 @@ def test_create_and_get_quotes(client):
     quotes = get_response.json()
     assert get_response.status_code == 200
     assert any(quote["content"] == "Test Quote" for quote in quotes)
+
+
+def test_delete_quote(client):
+    response = client.post(
+        "/quotes/",
+        json={
+            "content": "Quote to Delete",
+            "book_id": 1})
+    assert response.status_code == 200
+    quote_id = response.json()["id"]
+
+    delete_response = client.delete(f"/quotes/{quote_id}")
+    assert delete_response.status_code == 200
+
+    get_response = client.get(f"/quotes/{quote_id}")
+    assert get_response.status_code == 404
 
 
 def test_create_tags(client):

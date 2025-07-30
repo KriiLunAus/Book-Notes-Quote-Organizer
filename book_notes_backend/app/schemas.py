@@ -20,11 +20,11 @@ class QuoteBase(BaseModel):
 
 
 class AuthorCreate(AuthorBase):
-    pass
+    name: str
 
 
 class BookCreate(BookBase):
-    pass
+    author_id: int
 
 
 class QuoteCreate(QuoteBase):
