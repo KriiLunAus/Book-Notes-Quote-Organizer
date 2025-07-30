@@ -30,7 +30,11 @@ def get_author(
 
 
 @router.put("/{author_id}", response_model=schemas.AuthorOut)
-def update_author(author_id: int, author_update: schemas.AuthorCreate, db: Session = Depends(database.get_db)):
+def update_author(
+    author_id: int,
+    author_update: schemas.AuthorCreate,
+    db: Session = Depends(
+        database.get_db)):
     author = crud.update_author(db, author_id, author_update)
     if not author:
         raise HTTPException(status_code=404, detail="Author not found")

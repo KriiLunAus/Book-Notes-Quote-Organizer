@@ -51,7 +51,11 @@ def test_update_book(client):
     author_resp = client.post("/authors/", json={"name": "Book Author"})
     author = author_resp.json()
 
-    book_resp = client.post("/books/", json={"title": "Original Book", "author_id": author["id"]})
+    book_resp = client.post(
+        "/books/",
+        json={
+            "title": "Original Book",
+            "author_id": author["id"]})
     book = book_resp.json()
 
     update_data = {"title": "Updated Book Title", "author_id": author["id"]}
@@ -65,7 +69,7 @@ def test_update_book(client):
 def test_delete_book(client):
     response = client.post("/authors/", json={"name": "Test Author"})
     author_id = response.json()["id"]
-    
+
     response = client.post(
         "/books/",
         json={
@@ -102,18 +106,31 @@ def test_update_quote(client):
     author_resp = client.post("/authors/", json={"name": "Quote Author"})
     author = author_resp.json()
 
-    book_resp = client.post("/books/", json={"title": "Quote Book", "author_id": author["id"]})
+    book_resp = client.post(
+        "/books/",
+        json={
+            "title": "Quote Book",
+            "author_id": author["id"]})
     book = book_resp.json()
 
-    quote_resp = client.post("/quotes/", json={"content": "Original quote", "tags": "tag1, tag2", "book_id": book["id"]})
+    quote_resp = client.post(
+        "/quotes/",
+        json={
+            "content": "Original quote",
+            "tags": "tag1, tag2",
+            "book_id": book["id"]})
     quote = quote_resp.json()
 
-    update_data = {"content": "Updated quote content", "tags": "tag3,tag4", "book_id": book["id"]}
+    update_data = {
+        "content": "Updated quote content",
+        "tags": "tag3,tag4",
+        "book_id": book["id"]}
     resp = client.put(f"/quotes/{quote['id']}", json=update_data)
     assert resp.status_code == 200
     updated_quote = resp.json()
     assert updated_quote["content"] == update_data["content"]
-    expected_tags = ",".join(sorted([t.strip() for t in update_data["tags"].split(",")]))
+    expected_tags = ",".join(sorted([t.strip()
+                             for t in update_data["tags"].split(",")]))
     assert updated_quote["tags"] == expected_tags
 
 

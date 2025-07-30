@@ -36,14 +36,22 @@ def get_quote(
 
 
 @router.put("/{quote_id}", response_model=schemas.QuoteOut)
-def update_quote(quote_id: int, quote_update: schemas.QuoteCreate, db: Session = Depends(database.get_db)):
+def update_quote(
+    quote_id: int,
+    quote_update: schemas.QuoteCreate,
+    db: Session = Depends(
+        database.get_db)):
     quote = crud.update_quote(db, quote_id, quote_update)
     if not quote:
         raise HTTPException(status_code=404, detail="Quote not found")
-    
-    quote_full = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+
+    quote_full = db.query(
+        models.Quote).filter(
+        models.Quote.id == quote_id).first()
     if not quote_full:
-        raise HTTPException(status_code=404, detail="Quote not found after update")
+        raise HTTPException(
+            status_code=404,
+            detail="Quote not found after update")
     return quote_full
 
 

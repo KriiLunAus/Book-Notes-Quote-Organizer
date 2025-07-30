@@ -22,8 +22,13 @@ def get_author(db: Session, author_id: int):
         models.Author.id == author_id).first()
 
 
-def update_author(db: Session, author_id: int, updated_data: schemas.AuthorCreate):
-    author = db.query(models.Author).filter(models.Author.id == author_id).first()
+def update_author(
+        db: Session,
+        author_id: int,
+        updated_data: schemas.AuthorCreate):
+    author = db.query(
+        models.Author).filter(
+        models.Author.id == author_id).first()
     if not author:
         return None
     for key, value in updated_data.model_dump().items():
@@ -147,12 +152,16 @@ def get_quote(db: Session, quote_id: int):
     )
 
 
-def update_quote(db: Session, quote_id: int, updated_data: schemas.QuoteCreate):
+def update_quote(
+        db: Session,
+        quote_id: int,
+        updated_data: schemas.QuoteCreate):
     quote = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
     if not quote:
         return None
     cleaned_tags = ",".join(
-        sorted({tag.strip() for tag in updated_data.tags.split(",") if tag.strip()})
+        sorted({tag.strip() for tag in updated_data.tags.split(",")
+                if tag.strip()})
     )
     update_fields = updated_data.model_dump()
     update_fields["tags"] = cleaned_tags
