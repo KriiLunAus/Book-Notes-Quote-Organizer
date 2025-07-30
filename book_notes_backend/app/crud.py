@@ -22,6 +22,22 @@ def get_author(db: Session, author_id: int):
         models.Author.id == author_id).first()
 
 
+def update_author(
+        db: Session,
+        author_id: int,
+        updated_data: schemas.AuthorCreate):
+    author = db.query(
+        models.Author).filter(
+        models.Author.id == author_id).first()
+    if not author:
+        return None
+    for key, value in updated_data.model_dump().items():
+        setattr(author, key, value)
+    db.commit()
+    db.refresh(author)
+    return author
+
+
 def delete_author(db: Session, author_id: int):
     author = db.query(
         models.Author).filter(
@@ -51,6 +67,17 @@ def get_book(db: Session, book_id: int):
         joinedload(
             models.Book.author)).filter(
                 models.Book.id == book_id).first()
+
+
+def update_book(db: Session, book_id: int, updated_data: schemas.BookCreate):
+    book = db.query(models.Book).filter(models.Book.id == book_id).first()
+    if not book:
+        return None
+    for key, value in updated_data.model_dump().items():
+        setattr(book, key, value)
+    db.commit()
+    db.refresh(book)
+    return book
 
 
 def delete_book(db: Session, book_id: int):
@@ -123,6 +150,26 @@ def get_quote(db: Session, quote_id: int):
             )
         )
     )
+
+
+def update_quote(
+        db: Session,
+        quote_id: int,
+        updated_data: schemas.QuoteCreate):
+    quote = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+    if not quote:
+        return None
+    cleaned_tags = ",".join(
+        sorted({tag.strip() for tag in updated_data.tags.split(",")
+                if tag.strip()})
+    )
+    update_fields = updated_data.model_dump()
+    update_fields["tags"] = cleaned_tags
+    for key, value in update_fields.items():
+        setattr(quote, key, value)
+    db.commit()
+    db.refresh(quote)
+    return quote
 
 
 def delete_quote(db: Session, quote_id: int):
