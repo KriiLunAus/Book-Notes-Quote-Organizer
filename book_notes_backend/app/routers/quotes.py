@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, HTTPException
 from sqlalchemy.orm import Session
-from .. import crud, schemas, database
+from .. import crud, schemas, database, models
 
 router = APIRouter(prefix="/quotes", tags=["Quotes"])
 
@@ -33,6 +33,18 @@ def get_quote(
         database.get_db)):
     quote = crud.get_quote(db, quote_id)
     return quote
+
+
+@router.put("/quotes/{quote_id}", response_model=schemas.QuoteOut)
+def update_quote(quote_id: int, quote_update: schemas.QuoteCreate, db: Session = Depends(database.get_db)):
+    quote = crud.update_quote(db, quote_id, quote_update)
+    if not quote:
+        raise HTTPException(status_code=404, detail="Quote not found")
+    
+    quote_full = db.query(models.Quote).filter(models.Quote.id == quote_id).first()
+    if not quote_full:
+        raise HTTPException(status_code=404, detail="Quote not found after update")
+    return quote_full
 
 
 @router.delete("/{quote_id}", response_model=schemas.QuoteOut)
