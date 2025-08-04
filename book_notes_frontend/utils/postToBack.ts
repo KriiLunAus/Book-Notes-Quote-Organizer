@@ -1,8 +1,8 @@
 import axios from 'axios';
-
+import type { Book, Quote } from '../types/types';
 const BASE_URL = "http://127.0.0.1:8000/";
 
-export const postBook = async (data) => {
+export const postBook = async (data: Book) => {
   try {
     const response = await axios.post(`${BASE_URL}books/`, data, {
       headers:{
@@ -16,7 +16,7 @@ export const postBook = async (data) => {
   }
 }
 
-export const postAuthor = async (data) => {
+export const postAuthor = async (data: string) => {
   try {
     const response = await axios.post(`${BASE_URL}authors/`, data, {
       headers:{
@@ -31,7 +31,7 @@ export const postAuthor = async (data) => {
 }
 
 
-export const postQuote = async (data) => {
+export const postQuote = async (data: Quote) => {
   try {
     const response = await axios.post(`${BASE_URL}quotes/`, data, {
       headers:{

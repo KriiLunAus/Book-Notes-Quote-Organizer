@@ -1,3 +1,10 @@
+export interface Quote {
+  id: number;
+  content: string;
+  tags?: string;
+  book_id: number;
+}
+
 export interface Book {
   id: number;
   title: string;
@@ -5,9 +12,11 @@ export interface Book {
     id: number;
     name: string;
   };
-  quotes: {
-    id: number;
-    content: string;
-    book_id: number;
-  }[];
+  quotes: Quote[];
+}
+
+
+export interface Author {
+  id: number;
+  name: string;
 }

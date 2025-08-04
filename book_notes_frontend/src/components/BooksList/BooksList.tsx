@@ -5,7 +5,6 @@ import SearchField from '../SearchField/SearchField';
 import type { Book } from "../../types/types.ts";
 
 interface BooksListProps {
-  book: Book;
   books: Book[] | undefined;
   allBooks: Book[];
   setBooks: React.Dispatch<React.SetStateAction<Book[] | undefined>>;
