@@ -24,6 +24,7 @@ class AuthorCreate(AuthorBase):
 
 
 class BookCreate(BookBase):
+    title: str
     author_id: int
 
 
@@ -67,7 +68,8 @@ class AuthorOut(AuthorBase):
 class BookOut(BookBase):
     id: int
     author: AuthorNested
-
+    quotes: Optional[List[QuoteNested]] =[]
+    
     model_config = {"from_attributes": True}
 
 
