@@ -6,32 +6,11 @@ import { postQuote } from "../../../utils/postToBack.ts";
 import { deleteQuote } from "../../../utils/deleteFromBack.ts";
 import { updateQuote } from "../../../utils/updateBack.ts";
 import css from "./ModalForBookDetails.module.scss";
-
-type NewQuote = {
-  content: string;
-  tags?: string;
-  book_id: number;
-};
-
-interface Quote {
-  id: number;
-  content: string;
-  tags?: string;
-  book_id: number;
-}
-
-interface BookDetails {
-  id: number;
-  title: string;
-  author: {
-    name: string;
-  };
-  quotes: Quote[];
-}
+import type { Quote, Book } from "../../types/types.ts";
 
 interface Props {
   setModal: (value: boolean) => void;
-  bookDetails: BookDetails;
+  bookDetails: Book;
   handleBookDetails: (id: number) => Promise<void>;
 }
 
@@ -42,7 +21,7 @@ export default function ModalForBookDetails({
 }: Props) {
   const [expandedQuotes, setExpandedQuotes] = useState<Record<number, boolean>>({});
   const [newNoteForm, setNewNoteForm] = useState(false);
-  const [newNoteData, setNewNoteData] = useState<NewQuote>({ content: "", tags: "", book_id: 0});
+  const [newNoteData, setNewNoteData] = useState<Partial<Quote>>({ content: "", tags: "", book_id: 0});
   const [editingQuoteId, setEditingQuoteId] = useState<number | null>(null);
   const [quoteUpdateData, setQuoteUpdateData] = useState({ content: "", tags: "", book_id: 0});
   const [availableTags, setAvailableTags] = useState<string[]>([]);
@@ -75,7 +54,7 @@ export default function ModalForBookDetails({
     }));
   };
 
-  async function handlePostQuote(data: NewQuote) {
+  async function handlePostQuote(data: Partial<Quote>) {
     await postQuote(data);
     await handleBookDetails(bookDetails.id);
     setNewNoteForm(false);

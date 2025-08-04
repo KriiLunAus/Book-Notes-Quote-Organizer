@@ -2,12 +2,8 @@ import React, { useState, type JSX } from 'react';
 import css from "./ModalForNewBook.module.scss";
 import { postBook, postAuthor } from '../../../utils/postToBack';
 import { fetchAuthors, fetchBooks } from '../../../utils/fetchFromBack';
-import type { Book } from "../../types/types.ts";
+import type { Book, Author } from "../../types/types.ts";
 
-interface Author {
-  id: number;
-  name: string;
-}
 
 interface ModalForNewBookProps {
   setModal: React.Dispatch<React.SetStateAction<boolean>>;
