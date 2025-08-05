@@ -37,7 +37,7 @@ A simple and efficient web app to log books and store memorable quotes. Users ca
 ```bash
 # Clone the repo and navigate to backend
 git clone https://github.com/kriilunaus/book-notes-quote-organizer.git
-cd book-notes-quote-organizer/backend
+cd book_notes_backend
 
 # Create virtual environment
 python -m venv venv
@@ -64,7 +64,7 @@ uvicorn app.main:app --reload
 ## 🖥️Frontend setup
 
 ```bash
-cd ../frontend
+cd ../book_notes_frontend
 
 # Install dependencies
 npm install
