@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from .routers import books, authors, quotes, markdown, json
+from app.routers import books, authors, quotes, markdown, json
 from .database import Base, engine
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,7 +10,7 @@ Base.metadata.create_all(bind=engine)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,11 +1,9 @@
 import axios from 'axios';
-import type { Book, Quote } from '../types/types';
-const BASE_URL = "http://127.0.0.1:8000/";
 
+import type { Book, CreateQuoteInput } from '../src/types/types';
+const BASE_URL = "http://fastapi_app:8000";
 
-
-
-export const updateBook = async (id: number, data: Book) => {
+export const updateBook = async (id: number, data: Partial<Book>) => {
   try {
     const response = await axios.put(`${BASE_URL}books/${id}`, data, {
       headers:{
@@ -19,7 +17,8 @@ export const updateBook = async (id: number, data: Book) => {
   }
 }
 
-export const updateQuote = async (id: number, data: Quote) => {
+
+export const updateQuote = async (id: number, data: CreateQuoteInput) => {
   try {
     const response = await axios.put(`${BASE_URL}quotes/${id}`, data, {
       headers:{

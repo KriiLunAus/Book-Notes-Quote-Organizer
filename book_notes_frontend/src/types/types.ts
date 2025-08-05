@@ -5,6 +5,12 @@ export interface Quote {
   book_id: number;
 }
 
+export interface CreateQuoteInput {
+  content: string;
+  tags?: string;
+  book_id: number;
+}
+
 export interface Book {
   id: number;
   title: string;
@@ -15,8 +21,13 @@ export interface Book {
   quotes: Quote[];
 }
 
+export interface CreateBookInput {
+  title: string;
+  author_id : number;
+}
 
 export interface Author {
   id: number;
   name: string;
 }
+

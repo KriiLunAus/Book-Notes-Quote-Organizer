@@ -6,7 +6,7 @@ import { postQuote } from "../../../utils/postToBack.ts";
 import { deleteQuote } from "../../../utils/deleteFromBack.ts";
 import { updateQuote } from "../../../utils/updateBack.ts";
 import css from "./ModalForBookDetails.module.scss";
-import type { Quote, Book } from "../../types/types.ts";
+import type { Quote, Book, CreateQuoteInput } from "../../types/types.ts";
 
 interface Props {
   setModal: (value: boolean) => void;
@@ -21,7 +21,7 @@ export default function ModalForBookDetails({
 }: Props) {
   const [expandedQuotes, setExpandedQuotes] = useState<Record<number, boolean>>({});
   const [newNoteForm, setNewNoteForm] = useState(false);
-  const [newNoteData, setNewNoteData] = useState<Partial<Quote>>({ content: "", tags: "", book_id: 0});
+  const [newNoteData, setNewNoteData] = useState<CreateQuoteInput>({ content: "", tags: "", book_id: 0});
   const [editingQuoteId, setEditingQuoteId] = useState<number | null>(null);
   const [quoteUpdateData, setQuoteUpdateData] = useState({ content: "", tags: "", book_id: 0});
   const [availableTags, setAvailableTags] = useState<string[]>([]);
@@ -54,7 +54,7 @@ export default function ModalForBookDetails({
     }));
   };
 
-  async function handlePostQuote(data: Partial<Quote>) {
+  async function handlePostQuote(data: CreateQuoteInput) {
     await postQuote(data);
     await handleBookDetails(bookDetails.id);
     setNewNoteForm(false);

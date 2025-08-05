@@ -1,7 +1,7 @@
 from fastapi import Depends, APIRouter
 from sqlalchemy.orm import Session
 from fastapi.responses import Response
-from .. import crud, database
+from app import crud, database
 
 router = APIRouter(prefix="/export/markdown", tags=["Markdown"])
 
