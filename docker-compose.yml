@@ -7,9 +7,9 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL="postgresql://book_app_user:passtest12345@localhost/book_notes"
+      - DATABASE_URL=postgresql://book_app_user:passtest12345@db/book_notes
     volumes:
-      - ./book_notes_backend/app:/app
+      - ./book_notes_backend:/app
 
   frontend:
     build: ./book_notes_frontend
@@ -23,8 +23,11 @@ services:
     image: postgres:17
     container_name: postgres_db
     restart: always
-    env_file:
-      - ./book_notes_backend/.env
+    environment:
+      - POSTGRES_USER=book_app_user
+      - POSTGRES_PASSWORD=passtest12345
+      - POSTGRES_DB=book_notes
+      - POSTGRES_HOST_AUTH_METHOD=trust
     ports:
       - "5432:5432"
     volumes:

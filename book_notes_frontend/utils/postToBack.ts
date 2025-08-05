@@ -1,8 +1,8 @@
 import axios from 'axios';
-import type { Book, Quote } from '../types/types';
-const BASE_URL = "http://127.0.0.1:8000/";
+import type { CreateQuoteInput, CreateBookInput } from '../src/types/types';
+const BASE_URL = "http://fastapi_app:8000";
 
-export const postBook = async (data: Book) => {
+export const postBook = async (data: CreateBookInput) => {
   try {
     const response = await axios.post(`${BASE_URL}books/`, data, {
       headers:{
@@ -31,7 +31,7 @@ export const postAuthor = async (data: string) => {
 }
 
 
-export const postQuote = async (data: Quote) => {
+export const postQuote = async (data: CreateQuoteInput) => {
   try {
     const response = await axios.post(`${BASE_URL}quotes/`, data, {
       headers:{

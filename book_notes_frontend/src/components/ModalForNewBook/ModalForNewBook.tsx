@@ -55,7 +55,7 @@ export default function ModalForNewBook({
       author_id: authorId
     };
 
-    await postBook(JSON.stringify(data));
+    await postBook((data));
     const updatedBooks = await fetchBooks();
     setBooks(updatedBooks);
     setModal(false);
@@ -69,7 +69,7 @@ export default function ModalForNewBook({
 
       const newAuthorId = await handleFindAuthorId(pendingBook.authorName);
       if (newAuthorId) {
-        await postBook(JSON.stringify({
+        await postBook(({
           title: pendingBook.title,
           author_id: newAuthorId
         }));
