@@ -1,4 +1,5 @@
 import axios from 'axios';
+
 import type { CreateQuoteInput, CreateBookInput } from '../src/types/types';
 const BASE_URL = "http://fastapi_app:8000";
 

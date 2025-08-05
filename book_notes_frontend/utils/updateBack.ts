@@ -1,9 +1,7 @@
 import axios from 'axios';
+
 import type { Book, CreateQuoteInput } from '../src/types/types';
 const BASE_URL = "http://fastapi_app:8000";
-
-
-
 
 export const updateBook = async (id: number, data: Partial<Book>) => {
   try {
@@ -18,6 +16,7 @@ export const updateBook = async (id: number, data: Partial<Book>) => {
     throw error;
   }
 }
+
 
 export const updateQuote = async (id: number, data: CreateQuoteInput) => {
   try {
