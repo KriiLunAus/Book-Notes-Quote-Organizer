@@ -1,0 +1,67 @@
+.bookCard {
+  position: relative;
+  width: 600px;
+  height: 80px;
+  border: 1px solid darkgrey;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+
+  h2 {
+    display: flex;
+    align-items: center;
+    font-size: 28px;
+    width: 460px;
+    height: 70px;
+    cursor: pointer;
+  }
+
+  p {
+    margin-top: 30px;
+  }
+
+  .deleteBookBtn,
+  .updateBookBtn {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    cursor: pointer;
+  }
+
+  .updateBookBtn {
+    right: 40px;
+  }
+
+  label {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  input {
+    background-color: #f9f9f9;
+    padding: 8px;
+    width: 400px;
+    border-radius: 5px;
+    font-size: 18px;
+    outline: none;
+  }
+
+  .writeChanges {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+}
+
+.authorName {
+  position: absolute;
+  right: 10px;
+  width: fit-content;
+}

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-from .. import crud, database
+from app import crud, database
 
 router = APIRouter(prefix="/export/json", tags=["JSON Export"])
 

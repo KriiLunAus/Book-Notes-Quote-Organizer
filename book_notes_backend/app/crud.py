@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_
 from fastapi import HTTPException
-from . import models, schemas
+from app import models, schemas
 
 
 def create_author(db: Session, author: schemas.AuthorCreate):
