@@ -109,14 +109,14 @@ Full interactive API docs available at /docs (Swagger UI).
 ```arduino
 book-notes-quote-organizer/
 │
-├── backend/
+├── book_notes_backend/
 │   ├── app/  
 |   |   └── main.py
 │   ├── alembic/
 │   ├── requirements.txt
 │   └── Dockerfile
 │
-├── frontend/
+├── book_notes_frontend/
 │   ├── src/
 │   ├── public/
 │   ├── vite.config.ts
