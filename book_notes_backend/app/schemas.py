@@ -68,8 +68,8 @@ class AuthorOut(AuthorBase):
 class BookOut(BookBase):
     id: int
     author: AuthorNested
-    quotes: Optional[List[QuoteNested]] =[]
-    
+    quotes: Optional[List[QuoteNested]] = []
+
     model_config = {"from_attributes": True}
 
 
