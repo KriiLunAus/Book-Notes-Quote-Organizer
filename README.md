@@ -107,7 +107,6 @@ Full interactive API docs available at /docs (Swagger UI).
 ## 📂 Project Structure
 
 ```arduino
-
 book-notes-quote-organizer/
 │
 ├── backend/
